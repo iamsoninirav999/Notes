@@ -1,0 +1,31 @@
+{% extends 'notes/base.html' %}
+
+{% block 'content' %}
+    <div class="card m-3" style="height:auto;border:none;">
+        <div class="card-body p-1 d-flex flex-wrap">
+            
+        {% for note in my_archived_notes %}
+                <div class="card m-2" style="width: 15rem; ">
+                <div class="card-body">
+                    <h5 class="card-title">{{ note.title }}</h5>
+                    <p class="card-text">{{ note.note }}</p>
+                   
+                    <div class="row pl-1 ">
+                    {% for i  in note.label.all %}
+                     <button type="button" class="btn btn-sm m-1 btn-light" style="border-radius:10px;text-color:black;" >{{i}}</button>
+                    {% endfor %}
+                    </div>
+
+                    <a href="{% url 'unarchive_note' note.id %}" class="card-link">UnArchive</a>
+                    <a href="{% url 'delete_note' note.id %}" class="card-link">Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+
+           
+
+
+
+        </div>
+    </div>
+{% endblock 'content' %}

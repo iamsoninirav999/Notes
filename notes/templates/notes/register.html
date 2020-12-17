@@ -1,0 +1,32 @@
+{% extends 'notes/base.html' %}
+
+{% block 'content' %}
+    
+    <div class="card" style="width:30%;margin:auto;">
+        <div class="card-body">
+            <form action="{% url 'register' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-control" placeholder="Enter username" name="username">
+                    {% if message%}
+                    <strong><small style="color:red">{{message}}</small></strong>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" placeholder="Enter Email" name="email">
+                </div>
+                <div class="form-group">
+                    <label>password</label>
+                    <input type="password" class="form-control" placeholder="Enter Password" name="password">
+                </div>
+                <center>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </center>
+            </form>
+        </div>
+    </div>
+    
+
+{% endblock 'content' %}

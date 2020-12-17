@@ -1,0 +1,108 @@
+{% extends 'notes/base.html' %}
+
+{% block 'content' %}
+    <div class="card mt-3 ml-3 mr-3" style="height:auto;border:none;">
+        
+           <h4 class="ml-3">
+            Labels :  {% for label in labels %}
+                    <a href="{% url 'labled_notes' label%}" style="text-decoration:none;">
+                        <button type="button" class="btn m-1 btn-light">{{label}}</button>
+                    </a>
+                {% endfor %}
+                <button type="button" class="btn m-1 btn-light" data-toggle="modal" data-target="#labelModal">
+                    <span class="material-icons" style="font-size:25px;">add_circle_outline</span>
+                </button>
+                <button type="button" class="btn m-1 btn-light" data-toggle="modal" data-target="#deleteModal">
+                    <span class="material-icons" style="font-size:25px;">delete</span>
+                </button>
+            </h4>
+
+<!-- Label Modal -->
+<div class="modal fade" id="labelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create Label</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'create_label' %}" method="POST">
+            {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="labelname" class="form-control" id="label" placeholder="Enter Label Name">
+                </div>
+            
+        </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--end label modal-->
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Label</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <small class="mb-2">*please select labels which you wants to delete !</small>
+      
+        <form action="{% url 'delete_label' %}" method="POST">
+            {% csrf_token %}
+                
+                {% for label in labels %}
+                <div class="custom-control custom-checkbox">
+                 <input type="checkbox" class="custom-control-input" id="{{label.label}}" value="{{label.label}}"name="labels_to_delete">
+                 <label class="custom-control-label" for="{{label.label}}">{{label.label}}</label>
+                </div>                  
+                {% endfor %}
+            
+        </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--end Delete modal-->
+
+
+
+
+<div class="card-body p-1 d-flex flex-wrap">
+{% for note in labled_notes %}
+        <div class="card m-2" style="width: 15rem; ">
+        <div class="card-body">
+            <h5 class="card-title">{{ note.title }}</h5>
+            <p class="card-text">{{ note.note }}</p>
+            
+            <div class="row pl-1 ">
+            {% for i  in note.label.all %}
+                <button type="button" class="btn btn-sm m-1 btn-light" style="border-radius:10px;text-color:black;" >{{i}}</button>
+            {% endfor %}
+            </div>
+
+            <a href="{% url 'archive_note' note.id %}" class="card-link">Archive</a>
+            <a href="{% url 'delete_note' note.id %}" class="card-link">Delete</a>
+        </div>
+    </div>
+{% endfor %}
+
+           
+
+
+
+        </div>
+    </div>
+{% endblock 'content' %}
